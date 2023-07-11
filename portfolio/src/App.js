@@ -1,24 +1,36 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import Game from './tateti/tateti.js'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <body id='top' className="App">
+        <nav id="mainNav" className="navbar navbar-expand-lg static-top bg-dark text-uppercase navbar-dark">
+          <div className="container">
+            <a className="navbar-brand" href="#top"> Ian Petraccaro Cantero</a>
+            <button className='navbar-toggler'></button>
+            <div className='collapse navbar-collapse'>
+              <ul className='navbar-nav ms-auto'>
+                <li className='nav-item'>
+                  <a className='nav-link' href='#acerca-de'> Acerca de </a>
+                </li>
+                <li className='nav-item'>
+                  <a className='nav-link' href='#ta-te-ti'> Ta-Te-Ti </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <header className='text-center text-white masthead' style={{marginTop:'5%'}}> 
+          <div id='acerca-de' className='container'>
+          </div>
+          <div id='ta-te-ti' className='container'>
+            <React.StrictMode>
+              <Game></Game>
+            </React.StrictMode>
+          </div>
+        </header>
+    </body>
   );
 }
 
