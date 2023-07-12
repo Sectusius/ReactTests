@@ -1,9 +1,9 @@
 import React from 'react';
-import './App.css';
-import Game from './tateti/tateti.js'
-import About from './about/about'
+import './main.css';
+import Game from '../tateti/tateti'
+import About from '../about/about'
 
-function App() {
+function Main() {
   return (
     <div className="App">
         <nav id="mainNav" className="navbar navbar-expand-lg fixed-top bg-dark text-uppercase navbar-dark">
@@ -38,4 +38,4 @@ function App() {
   );
 }
 
-export default App;
+export default Main;

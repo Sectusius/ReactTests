@@ -1,7 +1,12 @@
 import React from 'react';
 import './tateti.css'
 
-  function Square(props){
+  interface SquareProps{
+    value: string | null;
+    onClick: () => void;
+  }
+
+  function Square(props: SquareProps): JSX.Element{
     return(
         <button className='square'
         onClick={props.onClick}>
@@ -9,12 +14,17 @@ import './tateti.css'
         </button>
     )
   }
+
+  interface BoardProps{
+    squares: Array<string | null>;
+    onClick: (i: number) => void;
+  }
   
-  class Board extends React.Component {
+  class Board extends React.Component<BoardProps> {
 
 
 
-    renderSquare(i) {
+    renderSquare(i: number): JSX.Element {
       return <Square value={this.props.squares[i]}
       onClick={()=> this.props.onClick(i)}
        />;
@@ -23,9 +33,9 @@ import './tateti.css'
     render() {
       const maxRows = 3;
       const maxColumns = 3;
-      const squares = [];
+      const squares: JSX.Element[] = [];
       for(let i=0; i < maxRows; i++){
-        const row=[];
+        const row: JSX.Element[] = [];
         for(let j=0; j < maxRows; j++){
             const squareIndex = i * maxColumns + j;
             row.push(this.renderSquare(squareIndex));
@@ -40,8 +50,15 @@ import './tateti.css'
     }
   }
   
-  class Game extends React.Component {
-    constructor(props){
+  interface GameState{
+    history: Array<{squares: Array<string | null>}>;
+    isAscending: boolean;
+    stepNumber: number;
+    xIsNext: boolean;
+  }
+
+  class Game extends React.Component<{}, GameState> {
+    constructor(props:{}){
         super(props)
         this.state = {
             history:[{
@@ -53,7 +70,7 @@ import './tateti.css'
         }
     }
 
-    handleClick(i){
+    handleClick(i: number): void{
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         const squares = current.squares.slice();
@@ -69,13 +86,13 @@ import './tateti.css'
             xIsNext: !this.state.xIsNext,
         })
     }
-    jumpTo(step){
+    jumpTo(step: number): void{
         this.setState({
             stepNumber: step,
             xIsNext: (step % 2) === 0,
         });
     }
-    toggleSortOrder(){
+    toggleSortOrder(): void{
         this.setState((prevState)=>({
             isAscending: !prevState.isAscending
         }));
@@ -138,7 +155,7 @@ import './tateti.css'
   
   // ========================================
 
-  function calculateWinner(squares){
+  function calculateWinner(squares: Array<string | null>): string | null{
     const lines =[
         [0,1,2],
         [3,4,5],
