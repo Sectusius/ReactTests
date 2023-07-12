@@ -1,11 +1,12 @@
 import React from 'react';
 import './App.css';
 import Game from './tateti/tateti.js'
+import About from './about/about'
 
 function App() {
   return (
-    <body id='top' className="App">
-        <nav id="mainNav" className="navbar navbar-expand-lg static-top bg-dark text-uppercase navbar-dark">
+    <div className="App">
+        <nav id="mainNav" className="navbar navbar-expand-lg fixed-top bg-dark text-uppercase navbar-dark">
           <div className="container">
             <a className="navbar-brand" href="#top"> Ian Petraccaro Cantero</a>
             <button className='navbar-toggler'></button>
@@ -23,6 +24,9 @@ function App() {
         </nav>
         <header className='text-center text-white masthead' style={{marginTop:'5%'}}> 
           <div id='acerca-de' className='container'>
+            <React.StrictMode>
+              <About></About>
+            </React.StrictMode>
           </div>
           <div id='ta-te-ti' className='container'>
             <React.StrictMode>
@@ -30,7 +34,7 @@ function App() {
             </React.StrictMode>
           </div>
         </header>
-    </body>
+    </div>
   );
 }
 
