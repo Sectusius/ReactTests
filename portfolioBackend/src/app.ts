@@ -1,10 +1,9 @@
-import mysql from 'mysql2';
-import {db} from './db';
+const sectionRoutes = require('./routes/section.routes');
+var express = require('express');
+const app = express();
 
+app.use('/api/section', sectionRoutes);
 
-db.authenticate().then(() => {
-    console.log('Connection has been established successfully.');
-}
-).catch((err: any) => {
-    console.error('Unable to connect to the database:', err);
+app.listen(3000, () => {
+    console.log('Server is running on port 3000');
 });

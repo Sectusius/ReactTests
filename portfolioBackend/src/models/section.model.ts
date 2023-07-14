@@ -6,7 +6,7 @@ db.authenticate().then(() => {
     console.error('Unable to connect to the database:', err);
 });
 
-const {Sequelize, DataTypes} = require('sequelize');
+const {DataTypes} = require('sequelize');
 
 const Section = db.define('Section', {
     // Model attributes are defined here
@@ -20,14 +20,13 @@ const Section = db.define('Section', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    description: {
-        type: DataTypes.STRING,
+    content: {
+        type: DataTypes.TEXT('long'),
+        field: 'content',
     },
 });
 
-db.sync().then(() => {
-    console.log('Section table created');
-}).catch((err: any) => {
-    console.error('Unable to create Section table:', err);
-});
+Section.sync();
+
+export {Section};
 
