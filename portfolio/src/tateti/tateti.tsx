@@ -27,6 +27,7 @@ import './tateti.css'
     renderSquare(i: number): JSX.Element {
       return <Square value={this.props.squares[i]}
       onClick={()=> this.props.onClick(i)}
+      key={i}
        />;
     }
   

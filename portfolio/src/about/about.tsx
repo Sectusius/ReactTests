@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './about.css';
+import { useEffect } from "react";
+import SectionData from '../types/sectionData';
+import SectionService from '../services/sectionService';
 
 const About = () => {
+    const [aboutSection, setAboutSection] = useState<SectionData | null>(null);
+    useEffect(() => {
+        const fetchSectionData = async () => {
+            try {
+                const sectionData = await SectionService.get('About');
+                setAboutSection(sectionData.data);
+                console.log(sectionData);
+            }
+            catch (error) {
+                console.log(error);
+            }
+        };
+        fetchSectionData();
+    }, []);
     return (
         
         <div className="about">
@@ -10,12 +27,8 @@ const About = () => {
             </div>
             <div className="about-content">
                 <h1>Acerca de mi</h1>
-                <p>
-                    Soy un estudiante de licenciatura informatica en la Universidad Nacional de La Plata. 
-                    Resido en La Plata, Buenos Aires, Argentina.
-                    Éste es un pequeño projecto realizado utilizando React y bootsrap, 
-                    con el fin de practicar y aprender sobre el desarrollo web.
-                    
+                <p style={{whiteSpace:"pre-line"}}>
+                    {aboutSection?.content}
                 </p>
             </div>
         </div>
