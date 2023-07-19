@@ -3,6 +3,7 @@ const { Section } = require('../models/section.model');
 
 export const createSection= async (req: Request, res: Response): Promise<void> => {
         try {
+            console.log(req.body)
             const section = await Section.create(req.body);
             res.status(201).json(section);
         } catch (error) {

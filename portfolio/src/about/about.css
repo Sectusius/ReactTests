@@ -13,15 +13,30 @@ textarea{
   background-color:inherit;
 }
 
-img {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin: auto;
-    margin-bottom: 20px;
-}
+
 
 .btn{
   margin: 10px;
+}
+
+.profilePicture{
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: auto;
+  margin-bottom: 20px;
+}
+
+.middle-picture{
+  background-color: rgba(255, 255, 255, 0.50);
+}
+
+.picture-view{
+  background-size: cover;
+  background-position: center;
+}
+.profilePicture:hover .middle-picture{
+  display: flex !important;
+  cursor: pointer;
 }
