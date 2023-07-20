@@ -1,5 +1,6 @@
 import React from 'react';
 import './tateti.css'
+import TaTeTiService from '../services/tatetiService';
 
   interface SquareProps{
     value: string | null;
@@ -56,6 +57,9 @@ import './tateti.css'
     isAscending: boolean;
     stepNumber: number;
     xIsNext: boolean;
+    uploaded: boolean;
+    playerXStats: any;
+    playerOStats: any;
   }
 
   class Game extends React.Component<{}, GameState> {
@@ -68,7 +72,66 @@ import './tateti.css'
             isAscending: true,
             stepNumber: 0,
             xIsNext:true,
+            uploaded: false,
+            playerXStats: null,
+            playerOStats: null,
         }
+    }
+
+    componentDidUpdate(prevProps: Readonly<{}>, prevState: Readonly<GameState>, snapshot?: any): void {
+      const {history, stepNumber, uploaded} = this.state;
+      const current = history[stepNumber];
+      const winner = calculateWinner(current.squares);
+      if(winner && !uploaded){
+        this.uploadToDB(winner);
+      }
+    }
+    componentDidMount(): void {
+      this.fetchAllWinsFromPlayer('X');
+      this.fetchAllWinsFromPlayer('O');
+    }
+
+    uploadToDB(winner:string): void{
+          const cantMovements = this.state.stepNumber;
+          const data = {
+              winner: winner!,
+              cantMovements: cantMovements
+          };
+          console.log(data);
+          try{
+              TaTeTiService.post(data);
+              console.log("Data uploaded to DB");
+              this.setState({
+                uploaded: true
+              });
+          }
+          catch(error){
+              console.log(error);
+          }
+    }
+
+    fetchAllWinsFromPlayer(player: string): number{
+        let wins = 0;
+        try{
+            const res=TaTeTiService.getWinsPlayer(player);
+            res.then((response)=>{
+              if(player==='X'){
+                this.setState({
+                  playerXStats: response.data
+                });
+              }
+              else{
+                this.setState({
+                  playerOStats: response.data
+                });
+              }
+            }
+            );
+        }
+        catch(error){
+            console.log('Error fetching player stats from DB: '+error);
+        }
+        return wins;
     }
 
     handleClick(i: number): void{
@@ -88,9 +151,11 @@ import './tateti.css'
         })
     }
     jumpTo(step: number): void{
+        
         this.setState({
             stepNumber: step,
             xIsNext: (step % 2) === 0,
+            uploaded: false
         });
     }
     toggleSortOrder(): void{
@@ -102,6 +167,8 @@ import './tateti.css'
       const history= this.state.history;
       const current = history[this.state.stepNumber];
       const winner = calculateWinner(current.squares);
+      const playerXStats = this.state.playerXStats;
+      const playerOStats = this.state.playerOStats;
       const moves = history.map((step, move) => {
         const desc = move ?
         'Go to move #'+move :
@@ -134,19 +201,44 @@ import './tateti.css'
       return (
         <div className='tateti'>
           <h1> Ta-Te-Ti </h1>
-          <div className="game">
-            <div className="game-board">
-              <Board
-              squares={current.squares}
-              onClick={(i) => this.handleClick(i)}
-              />
-            </div>
-            <div className="game-info">
-              <div>{status}</div>
-              <div>
-                  <button onClick={()=> this.toggleSortOrder()}> Toggle sort order</button>
+          <div className='container'>
+            <div className="game">
+              <div className="game-board">
+                <Board
+                squares={current.squares}
+                onClick={(i) => this.handleClick(i)}
+                />
               </div>
-              <ol>{moves}</ol>
+              <div className="game-info">
+                <div>{status}</div>
+                <div>
+                    <button onClick={()=> this.toggleSortOrder()}> Toggle sort order</button>
+                </div>
+                <ol>{moves}</ol>
+              </div>
+            </div>
+            <div className='container' style={{marginTop:'20px'}}>
+              <table className='table table-striped table-dark'>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Player X</th>
+                    <th>Player O</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope='row'> Wins </th>
+                    <td>{playerXStats ? playerXStats.totalWins : 'Loading stats...'}</td>
+                    <td>{playerOStats ? playerOStats.totalWins : 'Loading stats...'}</td>
+                  </tr>
+                  <tr>
+                    <th scope='row'> Total Moves in Wins </th>
+                    <td>{playerXStats ? playerXStats.totalMovesMade : 'Loading stats...'}</td>
+                    <td>{playerOStats ? playerOStats.totalMovesMade : 'Loading stats...'}</td>
+                  </tr>
+                  </tbody>
+                </table>       
             </div>
           </div>
         </div>

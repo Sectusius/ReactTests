@@ -1,5 +1,5 @@
 var express = require('express');
-const router = express.Router();
+var router = express.Router();
 const sectionController = require('../controllers/section.controller');
 
 router.post('/addSection', sectionController.createSection);
