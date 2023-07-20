@@ -30,11 +30,7 @@ export const updateSection= async (req: Request, res: Response): Promise<void> =
         try {
             const {title} = req.params;
             const {content} = req.body;
-            const section = await Section.findOneAndUpdate({title}, {content}, {new : true});
-            if(!section) {
-                res.status(404).json({message: 'Section not found'});
-                return;
-            }
+            const section = await Section.findOneAndUpdate({title}, {content}, {upsert : true});
             res.status(200).json(section);
         } catch (error) {
             console.log(error);

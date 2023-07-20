@@ -57,27 +57,14 @@ const About = () => {
         const file = e.target.files[0];
         const url = URL.createObjectURL(file);
         const image:SectionData = {id:null, title:'ProfileImg', content:url};
-        const actualProfileImg = await SectionService.get('ProfileImg');
-        if(actualProfileImg.data){
-            try {
-                const profileImg = await SectionService.update('ProfileImg', image);
-                setProfileImg(profileImg.data.content);
-                console.log(profileImg);
-            }
-            catch (error) {
-                console.log(error);
-            }
-        }else{
-            try {
-                const profileImg = await SectionService.create(image);
-                setProfileImg(profileImg.data.content);
-                console.log(profileImg);
-            }
-            catch (error) {
-                console.log(error);
-            }
+        try {
+            const profileImg = await SectionService.update('ProfileImg', image);
+            setProfileImg(profileImg.data.content);
+            console.log(profileImg);
         }
-
+        catch (error) {
+            console.log(error);
+        }
     };
 
     //ABOUT SECTION CHANGING
@@ -89,6 +76,7 @@ const About = () => {
             console.log(sectionData);
         }
         catch (error) {
+            setAboutSection({id:null, title:'About', content:''});
             console.log(error);
         }
     };
@@ -99,29 +87,17 @@ const About = () => {
     };
 
     const handleSaveClick = async () => {
-        const actualAboutSection = await SectionService.get('About');
-        console.log(actualAboutSection);
-        if(actualAboutSection.data){
-            try{
-                console.log(updatedContent);
-                const updatedSection = await SectionService.update(updatedContent!.title, updatedContent!);
-                fetchSectionData();
-                setIsEditing(false);
-            } catch (error) {
-                console.log(error);
-            }
-        } else{
-            updatedContent!.title='About';
-            try{
-                console.log(updatedContent);
-                const updatedSection = await SectionService.create(updatedContent!);
-                fetchSectionData();
-                setIsEditing(false);
-            } catch (error) {
-                console.log(error);
-            }
+        try{
+            updatedContent!.title = 'About';
+            console.log(updatedContent);
+            const updatedSection = await SectionService.update(updatedContent!.title, updatedContent!);
+            fetchSectionData();
+            setIsEditing(false);
+        } catch (error) {
+            console.log(error);
         }
     };
+
 
     const handleCancelClick = () => {
         setIsEditing(false);
